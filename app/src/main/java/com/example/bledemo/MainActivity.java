@@ -25,7 +25,7 @@ import android.widget.ListView;
 
 public class MainActivity extends AppCompatActivity implements BLEManagerCallerInterface {
 
-    BLEManager bleManager;
+    public BLEManager bleManager;
     private MainActivity mainActivity;
 
     @Override
