@@ -138,6 +138,8 @@ public class BLEManager extends ScanCallback {
     @Override
     public void onScanResult(int callbackType, ScanResult result) {
         if(!isResultAlreadyAtList(result)) {
+            result.getRssi();//Regresa la intensidad de la señal
+            result.getDevice().getName();//Nombre del dispositivo
             scanResults.add(result);
         }
         caller.newDeviceDetected();
@@ -193,12 +195,14 @@ public class BLEManager extends ScanCallback {
                     super.onConnectionStateChange(gatt, status, newState);
                     if(newState==BluetoothGatt.STATE_CONNECTED){
                         gatt.discoverServices();
+
                     }
                 }
 
                 @Override
                 public void onServicesDiscovered(BluetoothGatt gatt, int status) {
                     super.onServicesDiscovered(gatt, status);
+                    //Aqui ya puedo averiguar las caracteristicas
 
                 }
 
