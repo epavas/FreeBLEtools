@@ -4,9 +4,31 @@
     android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/device_list_item_text_pos"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_weight="0.5"
+        android:text="test"
+        android:textSize="20dp"
+
+        ></TextView>
+
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/device_list_item_text_view"
+        android:layout_margin="10dp"
+        android:textSize="20dp"
+        android:layout_weight="0.5"
+        android:text="test"
+
+        ></TextView>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/device_list_item_text_Rssi"
         android:layout_margin="10dp"
         android:textSize="20dp"
         android:layout_weight="0.5"

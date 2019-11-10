@@ -42,9 +42,19 @@ public class BluetoothDeviceListAdapter extends ArrayAdapter<ScanResult> {
 
         View rowView= inflater.inflate(R.layout.device_list_item, null, true);
 
+        ScanResult scanDivice =  scanResultList.get(position);
+
         TextView txtTitle = (TextView) rowView.findViewById(R.id.device_list_item_text_view);
         txtTitle.setText(scanResultList.get(position).getDevice().getAddress()+"");
-        String deviceName=scanResultList.get(position).getDevice().getName();
+
+        TextView txtPosition = (TextView) rowView.findViewById(R.id.device_list_item_text_pos);
+        txtPosition.setText(position+":");
+
+        String deviceRssi = ""+scanDivice.getRssi();
+        TextView txtRssi = (TextView) rowView.findViewById(R.id.device_list_item_text_Rssi);
+        txtRssi.setText(deviceRssi);
+
+        String deviceName=scanResultList.get(position).getDevice().getName()+" .:. "+scanDivice.getRssi();
         TextView deviceNameTxtView = (TextView) rowView.findViewById(R.id.device_list_item_text_view2);
         deviceNameTxtView.setText(deviceName);
 
@@ -52,8 +62,18 @@ public class BluetoothDeviceListAdapter extends ArrayAdapter<ScanResult> {
             @Override
             public void onClick(View view) {
                 String address=((TextView) view.findViewById(R.id.device_list_item_text_view)).getText()+"";
+                Toast.makeText(context,"clic corto: selected address: "+address,Toast.LENGTH_LONG).show();
+                //mainActivity.bleManager.connectToGATTServer(mainActivity.bleManager.getByAddress(address));
+            }
+        });
+        txtTitle.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                String address=((TextView) view.findViewById(R.id.device_list_item_text_view)).getText()+"";
                 Toast.makeText(context,"selected address: "+address,Toast.LENGTH_LONG).show();
                 mainActivity.bleManager.connectToGATTServer(mainActivity.bleManager.getByAddress(address));
+                
+                return true;
             }
         });
 
