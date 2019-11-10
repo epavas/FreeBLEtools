@@ -1,5 +1,6 @@
 package com.example.bledemo.ble;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
@@ -99,11 +100,19 @@ public class BLEManager extends ScanCallback {
                 }
             }
             if (ContextCompat.checkSelfPermission(this.context.getApplicationContext(),
-                    android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
             } else {
-                activity.requestPermissions( new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION},
+                activity.requestPermissions( new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                                                            Manifest.permission.BLUETOOTH},
                         REQUEST_CODE);
 
+            }
+            if (ContextCompat.checkSelfPermission(this.context.getApplicationContext(),
+                    Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_GRANTED){
+            }else{
+                activity.requestPermissions( new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.BLUETOOTH},
+                        REQUEST_CODE+1);
             }
         }catch (Exception error){
 
@@ -113,6 +122,14 @@ public class BLEManager extends ScanCallback {
 
     public void enableBluetoothDevice(Activity activity,int REQUEST_ENABLE_BT){
         try{
+            if (ContextCompat.checkSelfPermission(this.context.getApplicationContext(),
+                    Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_GRANTED){
+            }else{
+                activity.requestPermissions( new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION,
+                                Manifest.permission.BLUETOOTH},
+                        REQUEST_ENABLE_BT+5);
+            }
+
             if (bluetoothAdapter == null || !bluetoothAdapter.isEnabled()) {
                 Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
                 activity.startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);

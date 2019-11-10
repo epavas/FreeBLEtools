@@ -1,7 +1,10 @@
 package com.example.bledemo;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -17,16 +20,22 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.os.IBinder;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ListView;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity implements BLEManagerCallerInterface {
 
     public BLEManager bleManager;
     private MainActivity mainActivity;
+    private Main2Activity activity2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,13 +53,111 @@ public class MainActivity extends AppCompatActivity implements BLEManagerCallerI
                 }
             }
         });
-        bleManager=new BLEManager(this,this);
-        if(!bleManager.isBluetoothOn()){
-            bleManager.enableBluetoothDevice(this, 1001);
-        }else{
-            bleManager.requestLocationPermissions(this,1002);
-        }
+
+
+
+        CheckIfBLEIsSupported();
+
         mainActivity=this;
+
+        FloatingActionButton logBtn = findViewById(R.id.btn2);
+        logBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openActivity2();
+            }
+        });
+
+        FloatingActionButton btn3 = findViewById(R.id.btn3);
+        logBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog("BTN2 presionado");
+            }
+        });
+
+
+    }
+
+    /*##########################  Demas funciones      #############*/
+
+    public void CheckIfBLEIsSupported(){
+        if(!CheckIfBLEIsSupportedOrNot(this)){
+            alertDialog("No se puede crear debido a que el dispositivo no soporta BLE");
+
+        }else{
+
+
+            permissions();
+
+            bleManager=new BLEManager(this,this);
+            if(!bleManager.isBluetoothOn()){
+                bleManager.enableBluetoothDevice(this, 1001);
+            }else{
+                bleManager.requestLocationPermissions(this,1002);
+            }
+            alertDialog("BLE Funciona en este dispositivo");
+        }
+        Toast.makeText(getApplicationContext(),
+                "Toast por defecto", Toast.LENGTH_SHORT);
+    }
+
+    public static boolean CheckIfBLEIsSupportedOrNot(Context context){
+        try {
+            if (!context.getPackageManager().
+                    hasSystemFeature(PackageManager.FEATURE_BLUETOOTH_LE)) {
+                return false;
+            }
+            return true;
+        }catch (Exception error){
+
+        }
+        return false;
+    }
+
+    public void alertDialog(String message){
+
+        new AlertDialog.Builder(MainActivity.this)
+                .setTitle("Free BLE Tools")
+                .setMessage(""+message)
+                .setCancelable(false)
+                .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        // Whatever...
+                    }
+                }).show();
+    }
+
+
+    /*    ########        #### FIN #####        ######### */
+
+    /*    ########        #### Permisos #####        ######### */
+    public void permissions(){
+        if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.BLUETOOTH_ADMIN)
+                !=PackageManager.PERMISSION_GRANTED
+            || ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH)
+                !=PackageManager.PERMISSION_GRANTED){
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{
+                            Manifest.permission.
+                                    BLUETOOTH_ADMIN,
+                            Manifest.permission.
+                                    BLUETOOTH},1005);
+
+            return;
+        }
+
+
+    }
+
+    /*    ########        #### Fin Permisos #####        ######### */
+
+
+    public void openActivity2 (){
+        Intent intentActivity2 = new Intent(this, Main2Activity.class);
+        startActivity(intentActivity2);
     }
 
     @Override
@@ -81,6 +188,27 @@ public class MainActivity extends AppCompatActivity implements BLEManagerCallerI
 
         boolean allPermissionsGranted=true;
         if (requestCode == 1002) {
+            for (int currentResult:grantResults
+            ) {
+                if(currentResult!= PackageManager.PERMISSION_GRANTED){
+                    allPermissionsGranted=false;
+                    break;
+                }
+            }
+            if(!allPermissionsGranted){
+                AlertDialog.Builder builder=new AlertDialog.Builder(this)
+                        .setTitle("Permissions")
+                        .setMessage("Camera and Location permissions must be granted in order to execute the app")
+                        .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                finish();
+                            }
+                        });
+                builder.show();
+            }
+        }
+        if (requestCode == 1006 || requestCode == 1003) {
             for (int currentResult:grantResults
             ) {
                 if(currentResult!= PackageManager.PERMISSION_GRANTED){
