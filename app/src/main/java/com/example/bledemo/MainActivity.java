@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity implements BLEManagerCallerI
         main3Activity = new Main3Activity();
 
         intentActivity3 = new Intent(this, Main3Activity.class);
-        //intentActivity3.putExtra("mainActivity", mainActivity);
+        //intentActivity3.putExtra("Activities", new Activities(mainActivity, bleManager));
         //intentActivity3.putExtra("bleManager", bleManager);
 
         FloatingActionButton logBtn = findViewById(R.id.btn2);
@@ -176,6 +176,7 @@ public class MainActivity extends AppCompatActivity implements BLEManagerCallerI
         if (intentActivity3 == null){
             intentActivity3 = new Intent(this, Main2Activity.class);
         }
+
         startActivity(intentActivity3);
 
     }

@@ -66,6 +66,14 @@ public class BluetoothDeviceListAdapter extends ArrayAdapter<ScanResult> {
                 String address=((TextView) view.findViewById(R.id.device_list_item_text_view)).getText()+"";
                 Toast.makeText(context,"clic corto: selected address: "+address,Toast.LENGTH_LONG).show();
                 //mainActivity.bleManager.connectToGATTServer(mainActivity.bleManager.getByAddress(address));
+
+                //mainActivity.bleManager.connectToGATTServer(mainActivity.bleManager.getByAddress(address));
+                Intent intentActivity3 = mainActivity.intentActivity3;
+                intentActivity3.putExtra("addres", address);
+
+
+                mainActivity.openActivity3(intentActivity3);
+
             }
         });
         txtTitle.setOnLongClickListener(new View.OnLongClickListener() {
@@ -73,7 +81,7 @@ public class BluetoothDeviceListAdapter extends ArrayAdapter<ScanResult> {
             public boolean onLongClick(View view) {
                 String address=((TextView) view.findViewById(R.id.device_list_item_text_view)).getText()+"";
                 Toast.makeText(context,"selected address: "+address,Toast.LENGTH_LONG).show();
-                mainActivity.bleManager.connectToGATTServer(mainActivity.bleManager.getByAddress(address));
+                //mainActivity.bleManager.connectToGATTServer(mainActivity.bleManager.getByAddress(address));
                 Intent intentActivity3 = mainActivity.intentActivity3;
                 intentActivity3.putExtra("addres", address);
 

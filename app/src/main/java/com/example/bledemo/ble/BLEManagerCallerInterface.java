@@ -7,4 +7,5 @@ public interface BLEManagerCallerInterface {
     void scanFailed(int error);
     void newDeviceDetected();
 
+
 }
