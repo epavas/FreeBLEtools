@@ -5,6 +5,7 @@ import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.le.ScanResult;
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import com.example.bledemo.MainActivity;
 import com.example.bledemo.R;
 import com.example.bledemo.ble.BLEManager;
 
+import java.io.Serializable;
 import java.util.List;
 
 
@@ -72,7 +74,11 @@ public class BluetoothDeviceListAdapter extends ArrayAdapter<ScanResult> {
                 String address=((TextView) view.findViewById(R.id.device_list_item_text_view)).getText()+"";
                 Toast.makeText(context,"selected address: "+address,Toast.LENGTH_LONG).show();
                 mainActivity.bleManager.connectToGATTServer(mainActivity.bleManager.getByAddress(address));
-                
+                Intent intentActivity3 = mainActivity.intentActivity3;
+                intentActivity3.putExtra("addres", address);
+
+
+                mainActivity.openActivity3(intentActivity3);
                 return true;
             }
         });

@@ -28,10 +28,11 @@ import androidx.fragment.app.Fragment;
 
 import com.example.bledemo.R;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BLEManager extends ScanCallback {
+public class BLEManager extends ScanCallback  {
     BLEManagerCallerInterface caller;
     Context context;
 

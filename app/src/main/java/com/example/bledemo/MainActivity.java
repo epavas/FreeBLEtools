@@ -30,12 +30,16 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.Serializable;
+
 public class MainActivity extends AppCompatActivity implements BLEManagerCallerInterface {
 
     public BLEManager bleManager;
     private MainActivity mainActivity;
     private Main2Activity activity2;
-
+    public Main3Activity main3Activity;
+    public Intent intentActivity2;
+    public Intent intentActivity3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,12 +63,18 @@ public class MainActivity extends AppCompatActivity implements BLEManagerCallerI
         CheckIfBLEIsSupported();
 
         mainActivity=this;
+        main3Activity = new Main3Activity();
+
+        intentActivity3 = new Intent(this, Main3Activity.class);
+        //intentActivity3.putExtra("mainActivity", mainActivity);
+        //intentActivity3.putExtra("bleManager", bleManager);
 
         FloatingActionButton logBtn = findViewById(R.id.btn2);
         logBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivity2();
+
+                openActivity2(intentActivity2);
             }
         });
 
@@ -155,9 +165,19 @@ public class MainActivity extends AppCompatActivity implements BLEManagerCallerI
     /*    ########        #### Fin Permisos #####        ######### */
 
 
-    public void openActivity2 (){
-        Intent intentActivity2 = new Intent(this, Main2Activity.class);
+    public void openActivity2 (Intent intentActivity2){
+        if (intentActivity2 == null){
+            intentActivity2 = new Intent(this, Main2Activity.class);
+        }
         startActivity(intentActivity2);
+    }
+
+    public void openActivity3 (Intent intentActivity3){
+        if (intentActivity3 == null){
+            intentActivity3 = new Intent(this, Main2Activity.class);
+        }
+        startActivity(intentActivity3);
+
     }
 
     @Override
