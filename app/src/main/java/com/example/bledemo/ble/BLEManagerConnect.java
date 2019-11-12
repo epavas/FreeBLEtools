@@ -47,6 +47,8 @@ public class BLEManagerConnect {
                     List<BluetoothGattService> sevices = gatt.getServices();
                     caller.onServicesDiscovered(gatt, status);
 
+
+
                 }
 
                 @Override

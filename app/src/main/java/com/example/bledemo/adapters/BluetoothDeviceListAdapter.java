@@ -56,7 +56,7 @@ public class BluetoothDeviceListAdapter extends ArrayAdapter<ScanResult> {
         TextView txtRssi = (TextView) rowView.findViewById(R.id.device_list_item_text_Rssi);
         txtRssi.setText(deviceRssi);
 
-        String deviceName=scanResultList.get(position).getDevice().getName()+" .:. "+scanDivice.getRssi();
+        String deviceName=scanResultList.get(position).getDevice().getName();
         TextView deviceNameTxtView = (TextView) rowView.findViewById(R.id.device_list_item_text_view2);
         deviceNameTxtView.setText(deviceName);
 

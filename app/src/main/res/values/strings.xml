@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BLEDemo</string>
+    <string name="app_name">Free BLE Tools</string>
     <string name="action_settings">Settings</string>
-    <string name="title_activity_main3">Main3Activity</string>
+    <string name="title_activity_main3">Free BLE Tools: Conexión</string>
 </resources>

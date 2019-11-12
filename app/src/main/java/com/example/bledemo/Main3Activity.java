@@ -7,10 +7,13 @@ import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import com.example.bledemo.adapters.BluetoothDeviceListAdapter;
+import com.example.bledemo.adapters.BluetoothServiceListAdapter;
 import com.example.bledemo.ble.BLEManager;
 import com.example.bledemo.ble.BLEManagerCallerInterface;
 import com.example.bledemo.ble.BLEManagerConnect;
@@ -22,8 +25,13 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Main3Activity extends AppCompatActivity implements BLEManagerCallerInterface, BLEManagerConnectCallerInterface {
 
@@ -36,6 +44,8 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
     public TextView txtNameDevice;
     public TextView txtConnect;
     public boolean connected;
+    public Main3Activity main3Activity;
+    public List<BluetoothGattService> lastBluetoothGattServices= new ArrayList<>();
 
 
     @Override
@@ -75,6 +85,7 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
 
         Intent intent = getIntent();
         addres = intent.getStringExtra("addres");
+        main3Activity = this;
         
 
         txtConnect = (TextView)findViewById(R.id.textConect);
@@ -88,7 +99,7 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
         bleManagerConnect = new BLEManagerConnect(this, this);
 
 
-        
+
 
 
     }
@@ -111,15 +122,17 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
     @Override
     public void newDeviceDetected() {
         BluetoothDevice bleDevice = bleManager.getByAddress(addres);
-        if(bleDevice != null && !connected){
+        if(bleDevice != null && !connected) {
 
             bluetoothDevice = bleDevice;
             txtNameDevice.setText(bluetoothDevice.getName());
             bleManagerConnect.connectToGATTServer(bluetoothDevice);
+
         }
     }
 
     //############ Connect methods
+
     @Override
     public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
 
@@ -137,11 +150,40 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
 
     @Override
     public void onServicesDiscovered(BluetoothGatt lastBluetoothGatt, int status) {
+
+
+
         try {
 
             if(lastBluetoothGatt!=null){
-                for(BluetoothGattService currentService: lastBluetoothGatt.getServices()){
+
+
+                lastBluetoothGattServices.clear();
+                lastBluetoothGattServices = lastBluetoothGatt.getServices();
+                ArrayList<String> uIDServices  = new ArrayList<>();
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try{
+                            ListView listView=(ListView)findViewById(R.id.service_list_id);
+                            BluetoothServiceListAdapter adapter=new BluetoothServiceListAdapter(getApplicationContext(), main3Activity, lastBluetoothGattServices);
+                            listView.setAdapter(adapter);
+
+                            TextView txtConection = (TextView)findViewById(R.id.conecction_item_txtServicios);
+                            txtConection.setText("Servicios:");
+
+                        }catch (Exception error){
+                            Toast.makeText(getApplicationContext(),"Error "+error, Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                });
+
+                for(BluetoothGattService currentService: lastBluetoothGattServices){
                     if(currentService!=null){
+                        uIDServices.add( currentService.getUuid()+"");
                         for(BluetoothGattCharacteristic currentCharacteristic:currentService.getCharacteristics()){
                             if(currentCharacteristic!=null){
                                 if(isCharacteristicNotifiable(currentCharacteristic)){
@@ -173,6 +215,14 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
                         }
                     }
                 }
+
+                /*String uIDS [] = new String[uIDServices.size()];
+                for (int i =0; i < uIDServices.size(); i++){
+                    uIDS[i] = uIDServices.get(i);
+                }
+                ArrayAdapter <String> adapterServices = new ArrayAdapter<String>(this, R.layout.list_item_uids, uIDS);
+                ListView lvUIDS = (ListView) findViewById(R.id.service_list_id);
+                lvUIDS.setAdapter(adapterServices);*/
             }
         } catch (Exception error){
             AlertDialog.Builder builder=new AlertDialog.Builder(this)
@@ -189,6 +239,7 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
             builder.show();
         }
     }
+
 
     public boolean isCharacteristicWriteable(BluetoothGattCharacteristic characteristic) {
         return (characteristic.getProperties() &
