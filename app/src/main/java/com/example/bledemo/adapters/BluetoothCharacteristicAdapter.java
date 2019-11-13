@@ -37,11 +37,14 @@ public class BluetoothCharacteristicAdapter extends ArrayAdapter<BluetoothGattCh
 
         BluetoothGattCharacteristic currentCharacteristic = currentCharacteristics.get(position);
 
-        TextView txtCharac = (TextView)rowView.findViewById(R.id.characteristic_list_item_text_active);
+
 
 
         if (currentCharacteristic != null){
-            txtCharac.setText("OkCharacteristic");
+            TextView txtChUUID = (TextView)rowView.findViewById(R.id.characteristic_list_item_UUID);
+            txtChUUID.setText(currentCharacteristic.getUuid()+"");
+
+
             String typeChar = "(";
             if(main3Activity.isCharacteristicReadable(currentCharacteristic)){
                 typeChar += " R ";
@@ -53,8 +56,8 @@ public class BluetoothCharacteristicAdapter extends ArrayAdapter<BluetoothGattCh
                 typeChar += "/ N ";
             }
 
-            TextView txtChName = (TextView)rowView.findViewById(R.id.characteristic_list_item_text_name);
-            txtChName.setText(typeChar+")");
+            TextView txtP = (TextView)rowView.findViewById(R.id.characteristic_list_item_text_P);
+            txtP.setText(typeChar+")");
 
 
         }

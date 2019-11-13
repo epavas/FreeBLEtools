@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements BLEManagerCallerI
             }else{
                 bleManager.requestLocationPermissions(this,1002);
             }
-            alertDialog("BLE Funciona en este dispositivo");
+            //alertDialog("BLE Funciona en este dispositivo");
         }
         Toast.makeText(getApplicationContext(),
                 "Toast por defecto", Toast.LENGTH_SHORT);

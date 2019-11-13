@@ -60,11 +60,11 @@ public class BluetoothDeviceListAdapter extends ArrayAdapter<ScanResult> {
         TextView deviceNameTxtView = (TextView) rowView.findViewById(R.id.device_list_item_text_view2);
         deviceNameTxtView.setText(deviceName);
 
-        txtTitle.setOnClickListener(new View.OnClickListener() {
+        /*txtTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String address=((TextView) view.findViewById(R.id.device_list_item_text_view)).getText()+"";
-                Toast.makeText(context,"clic corto: selected address: "+address,Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"Conectando con: address: "+address,Toast.LENGTH_LONG).show();
                 //mainActivity.bleManager.connectToGATTServer(mainActivity.bleManager.getByAddress(address));
 
                 //mainActivity.bleManager.connectToGATTServer(mainActivity.bleManager.getByAddress(address));
@@ -75,12 +75,12 @@ public class BluetoothDeviceListAdapter extends ArrayAdapter<ScanResult> {
                 mainActivity.openActivity3(intentActivity3);
 
             }
-        });
+        });*/
         txtTitle.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View view) {
                 String address=((TextView) view.findViewById(R.id.device_list_item_text_view)).getText()+"";
-                Toast.makeText(context,"selected address: "+address,Toast.LENGTH_LONG).show();
+                Toast.makeText(context,"Conectando con: address: "+address,Toast.LENGTH_LONG).show();
                 //mainActivity.bleManager.connectToGATTServer(mainActivity.bleManager.getByAddress(address));
                 Intent intentActivity3 = mainActivity.intentActivity3;
                 intentActivity3.putExtra("addres", address);

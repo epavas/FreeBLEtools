@@ -84,11 +84,13 @@ public class BLEManagerConnect {
                 @Override
                 public void onReadRemoteRssi(BluetoothGatt gatt, int rssi, int status) {
                     super.onReadRemoteRssi(gatt, rssi, status);
+
                 }
 
                 @Override
                 public void onMtuChanged(BluetoothGatt gatt, int mtu, int status) {
                     super.onMtuChanged(gatt, mtu, status);
+
                 }
             },BluetoothDevice.TRANSPORT_LE);
         }catch (Exception error){

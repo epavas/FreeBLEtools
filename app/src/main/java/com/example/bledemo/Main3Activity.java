@@ -46,6 +46,10 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
     public boolean connected;
     public Main3Activity main3Activity;
     public List<BluetoothGattService> lastBluetoothGattServices= new ArrayList<>();
+    public ListView listViewServi;
+    public BluetoothServiceListAdapter adapterLVServ;
+    public boolean isstartedLV =false;
+    public BluetoothGatt bluetoothGatt = null;
 
 
     @Override
@@ -64,13 +68,17 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
                     if(!connected) {
                         bluetoothDevice = bleDevice;
                         txtNameDevice.setText(bluetoothDevice.getName());
-                        bleManagerConnect.connectToGATTServer(bluetoothDevice);
+
 
                         Snackbar.make(view, "Conectando...", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
+                        bleManagerConnect.connectToGATTServer(bluetoothDevice);
                     }else{
                         Snackbar.make(view, "Ya se encuentra conectando", Snackbar.LENGTH_LONG)
                                 .setAction("Action", null).show();
+
+
+
                     }
                 }else{
                     Snackbar.make(view, "El dispositivo al que intenta conectarse no se encuentra", Snackbar.LENGTH_LONG)
@@ -80,6 +88,22 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
                         "Toast por defecto", Toast.LENGTH_SHORT);
 
 
+            }
+        });
+        fab.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if(bluetoothGatt != null){
+
+                    Snackbar.make(v, "Desconectando...", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+
+                    bluetoothGatt.disconnect();
+
+                    connected=false;
+                    return true;
+                }
+                return false;
             }
         });
 
@@ -92,6 +116,8 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
         txtNameDevice = (TextView)findViewById(R.id.textNameDevice);
         txtAddres = (TextView)findViewById(R.id.textAddres);
         txtAddres.setText(addres);
+
+
 
         bleManager = new BLEManager(this, this);
         bleManager.scanDevices();
@@ -140,11 +166,23 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
             gatt.discoverServices();
             txtConnect.setText("(Conectado)");
             connected = true;
+            bluetoothGatt = gatt;
 
+        } else if(newState == BluetoothGatt.STATE_DISCONNECTED){
+            txtConnect.setText("(Desconectado)");
+            bluetoothGatt.close();
+            connected = false;
+        } else if(newState == BluetoothGatt.STATE_DISCONNECTING){
+            txtConnect.setText("(Desconectando...)");
+            connected = false;
+        } else if(newState == BluetoothGatt.STATE_CONNECTING){
+            txtConnect.setText("(Conectando...)");
+            connected = false;
         }else{
             txtConnect.setText("(Desconectado)");
             connected = false;
         }
+        listViewServi.setAdapter(adapterLVServ);
 
     }
 
@@ -167,10 +205,21 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
                     @Override
                     public void run() {
                         try{
-                            ListView listView=(ListView)findViewById(R.id.service_list_id);
-                            BluetoothServiceListAdapter adapter=new BluetoothServiceListAdapter(getApplicationContext(), main3Activity, lastBluetoothGattServices);
-                            listView.setAdapter(adapter);
 
+                            if(!isstartedLV){
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        listViewServi=(ListView)findViewById(R.id.service_list_id);
+                                        adapterLVServ=new BluetoothServiceListAdapter(getApplicationContext(), main3Activity, lastBluetoothGattServices);
+                                        listViewServi.setAdapter(adapterLVServ);
+                                    }
+                                });
+
+                            }else {
+                                adapterLVServ.notify();
+
+                            }
                             TextView txtConection = (TextView)findViewById(R.id.conecction_item_txtServicios);
                             txtConection.setText("Servicios:");
 
@@ -254,6 +303,8 @@ public class Main3Activity extends AppCompatActivity implements BLEManagerCaller
     public boolean isCharacteristicNotifiable(BluetoothGattCharacteristic characteristic) {
         return ((characteristic.getProperties() & BluetoothGattCharacteristic.PROPERTY_NOTIFY) != 0);
     }
+
+
 
 /*
     public View getView(int position) {
