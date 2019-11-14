@@ -83,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements BLEManagerCallerI
             @Override
             public void onClick(View v) {
                 if(bleManager!=null){
-                    bleManager.scanDevices();
+                    bleManager.stopScan();
                 }
             }
         });
