@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements BLEManagerCallerI
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
+        /*FloatingActionButton fab = findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -56,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements BLEManagerCallerI
                     bleManager.scanDevices();
                 }
             }
-        });
+        });*/
 
 
 
@@ -69,18 +69,22 @@ public class MainActivity extends AppCompatActivity implements BLEManagerCallerI
         //intentActivity3.putExtra("Activities", new Activities(mainActivity, bleManager));
         //intentActivity3.putExtra("bleManager", bleManager);
 
-        final FloatingActionButton firstSubtn = findViewById(R.id.submenu1);
+        final FloatingActionButton firstSubtn = findViewById(R.id.fab);
         firstSubtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
-                alertDialog("Pressed first subtn");
+            public void onClick(View view) {
+                if(bleManager!=null){
+                    bleManager.scanDevices();
+                }
             }
         });
         final FloatingActionButton secondSubtn = findViewById(R.id.submenu2);
         secondSubtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                alertDialog("Pressed second subtn");
+                if(bleManager!=null){
+                    bleManager.scanDevices();
+                }
             }
         });
         final FloatingActionButton thirdSubtn = findViewById(R.id.submenu3);

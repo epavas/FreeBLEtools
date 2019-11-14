@@ -154,6 +154,16 @@ public class BLEManager extends ScanCallback  {
         }
     }
 
+    public void stopScan(){
+        try{
+            bluetoothLeScanner=bluetoothAdapter.getBluetoothLeScanner();
+            bluetoothLeScanner.stopScan(this);
+            caller.scanStoped();
+        }catch (Exception error){
+
+        }
+    }
+
     @Override
     public void onScanResult(int callbackType, ScanResult result) {
         if(!isResultAlreadyAtList(result)) {
