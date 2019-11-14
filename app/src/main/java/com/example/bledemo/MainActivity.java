@@ -69,24 +69,54 @@ public class MainActivity extends AppCompatActivity implements BLEManagerCallerI
         //intentActivity3.putExtra("Activities", new Activities(mainActivity, bleManager));
         //intentActivity3.putExtra("bleManager", bleManager);
 
-        FloatingActionButton logBtn = findViewById(R.id.btn2);
+        final FloatingActionButton firstSubtn = findViewById(R.id.submenu1);
+        firstSubtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog("Pressed first subtn");
+            }
+        });
+        final FloatingActionButton secondSubtn = findViewById(R.id.submenu2);
+        secondSubtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog("Pressed second subtn");
+            }
+        });
+        final FloatingActionButton thirdSubtn = findViewById(R.id.submenu3);
+        thirdSubtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog("Pressed third subtn");
+            }
+        });
+        final FloatingActionButton logBtn = findViewById(R.id.menu);
+        final FloatingActionButton closeBtn = findViewById(R.id.closemenu);
+
         logBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                firstSubtn.setVisibility(View.VISIBLE);
+                secondSubtn.setVisibility(View.VISIBLE);
+                thirdSubtn.setVisibility(View.VISIBLE);
+                logBtn.setVisibility(View.GONE);
+                closeBtn.setVisibility(View.VISIBLE);
+                //alertDialog("Opened menu");
+            }
+        });
 
-                openActivity2(intentActivity2);
+        closeBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                firstSubtn.setVisibility(View.GONE);
+                secondSubtn.setVisibility(View.GONE);
+                thirdSubtn.setVisibility(View.GONE);
+                closeBtn.setVisibility(View.GONE);
+                logBtn.setVisibility(View.VISIBLE);
             }
         });
 
         FloatingActionButton btn3 = findViewById(R.id.btn3);
-        logBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                alertDialog("BTN2 presionado");
-            }
-        });
-
-
     }
 
     /*##########################  Demas funciones      #############*/
